@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8894787c283c48999646d460682f685a" Name="Diagram1">
+        <EntityTypeShape EntityType="PPPK_ProjektModel.Item" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PPPK_ProjektModel.PutniNalog" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PPPK_ProjektModel.Servi" Width="1.5" PointX="6" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PPPK_ProjektModel.sysdiagram" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PPPK_ProjektModel.Vozac" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PPPK_ProjektModel.Vozilo" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <AssociationConnector Association="PPPK_ProjektModel.FK__Servis__ItemID__3BCADD1B" ManuallyRouted="false" />
+        <AssociationConnector Association="PPPK_ProjektModel.FK__PutniNalo__Vozac__37FA4C37" ManuallyRouted="false" />
+        <AssociationConnector Association="PPPK_ProjektModel.FK__PutniNalo__Vozil__38EE7070" ManuallyRouted="false" />
+        <AssociationConnector Association="PPPK_ProjektModel.FK__Servis__VoziloID__3CBF0154" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

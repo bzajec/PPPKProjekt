@@ -1,0 +1,804 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PPPK_ProjektModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="IDItem" />
+          </Key>
+          <Property Name="IDItem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PutniNalog">
+          <Key>
+            <PropertyRef Name="IDPutniNalog" />
+          </Key>
+          <Property Name="IDPutniNalog" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VozacID" Type="int" />
+          <Property Name="VoziloID" Type="int" />
+          <Property Name="Tip" Type="nvarchar" MaxLength="50" />
+          <Property Name="PocetniGrad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ZavrsniGrad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="OcekivaniDani" Type="int" Nullable="false" />
+          <Property Name="Kilometri" Type="int" Nullable="false" />
+          <Property Name="Brzina" Type="int" Nullable="false" />
+          <Property Name="Gorivo" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Servis">
+          <Key>
+            <PropertyRef Name="IDServis" />
+          </Key>
+          <Property Name="IDServis" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ItemID" Type="int" />
+          <Property Name="VoziloID" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Vozac">
+          <Key>
+            <PropertyRef Name="IDVozac" />
+          </Key>
+          <Property Name="IDVozac" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BrojMobitela" Type="int" Nullable="false" />
+          <Property Name="BrojVozackeDozvole" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vozilo">
+          <Key>
+            <PropertyRef Name="IDVozilo" />
+          </Key>
+          <Property Name="IDVozilo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipVozila" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="MarkaVozila" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="GodinaProizvodnje" Type="int" Nullable="false" />
+          <Property Name="InicijalnoStanjeKilometara" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__PutniNalo__Vozac__37FA4C37">
+          <End Role="Vozac" Type="Self.Vozac" Multiplicity="0..1" />
+          <End Role="PutniNalog" Type="Self.PutniNalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozac">
+              <PropertyRef Name="IDVozac" />
+            </Principal>
+            <Dependent Role="PutniNalog">
+              <PropertyRef Name="VozacID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PutniNalo__Vozil__38EE7070">
+          <End Role="Vozilo" Type="Self.Vozilo" Multiplicity="0..1" />
+          <End Role="PutniNalog" Type="Self.PutniNalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozilo">
+              <PropertyRef Name="IDVozilo" />
+            </Principal>
+            <Dependent Role="PutniNalog">
+              <PropertyRef Name="VoziloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Servis__ItemID__3BCADD1B">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Servis" Type="Self.Servis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="IDItem" />
+            </Principal>
+            <Dependent Role="Servis">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Servis__VoziloID__3CBF0154">
+          <End Role="Vozilo" Type="Self.Vozilo" Multiplicity="0..1" />
+          <End Role="Servis" Type="Self.Servis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozilo">
+              <PropertyRef Name="IDVozilo" />
+            </Principal>
+            <Dependent Role="Servis">
+              <PropertyRef Name="VoziloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddPutniNalog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="VozacID" Type="int" Mode="In" />
+          <Parameter Name="VoziloID" Type="int" Mode="In" />
+          <Parameter Name="Tip" Type="nvarchar" Mode="In" />
+          <Parameter Name="PocetniGrad" Type="nvarchar" Mode="In" />
+          <Parameter Name="ZavrsniGrad" Type="nvarchar" Mode="In" />
+          <Parameter Name="OcekivaniDani" Type="int" Mode="In" />
+          <Parameter Name="Kilometri" Type="int" Mode="In" />
+          <Parameter Name="Brzina" Type="int" Mode="In" />
+          <Parameter Name="Gorivo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddServis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idServis" Type="int" Mode="In" />
+          <Parameter Name="ItemID" Type="int" Mode="In" />
+          <Parameter Name="VoziloID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddVozac" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="BrojMobitela" Type="int" Mode="In" />
+          <Parameter Name="BrojVozackeDozvole" Type="int" Mode="In" />
+        </Function>
+        <Function Name="AddVozilo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TipVozila" Type="nvarchar" Mode="In" />
+          <Parameter Name="MarkaVozila" Type="nvarchar" Mode="In" />
+          <Parameter Name="GodinaProizvodnje" Type="int" Mode="In" />
+          <Parameter Name="InicijalnoStanjeKilometara" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeletePutniNalog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPutniNalog" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteServis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idServis" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteVozac" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozac" Type="int" Mode="In" />
+        </Function>
+        <Function Name="DeleteVozilo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozilo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="GetAllPutniNalogi" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllVozaci" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetAllVozila" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="GetPutniNalog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPutniNalog" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetVozac" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozac" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetVozilo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozilo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SelectAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="UpdatePutniNalog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idPutniNalog" Type="int" Mode="In" />
+          <Parameter Name="VozacID" Type="int" Mode="In" />
+          <Parameter Name="VoziloID" Type="int" Mode="In" />
+          <Parameter Name="Tip" Type="nvarchar" Mode="In" />
+          <Parameter Name="PocetniGrad" Type="nvarchar" Mode="In" />
+          <Parameter Name="ZavrsniGrad" Type="nvarchar" Mode="In" />
+          <Parameter Name="OcekivaniDani" Type="int" Mode="In" />
+          <Parameter Name="Kilometri" Type="int" Mode="In" />
+          <Parameter Name="Brzina" Type="int" Mode="In" />
+          <Parameter Name="Gorivo" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateServis" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idServis" Type="int" Mode="In" />
+          <Parameter Name="ItemID" Type="int" Mode="In" />
+          <Parameter Name="VoziloID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateVozac" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozac" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="BrojMobitela" Type="int" Mode="In" />
+          <Parameter Name="BrojVozackeDozvole" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateVozilo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="idVozilo" Type="int" Mode="In" />
+          <Parameter Name="TipVozila" Type="nvarchar" Mode="In" />
+          <Parameter Name="MarkaVozila" Type="nvarchar" Mode="In" />
+          <Parameter Name="GodinaProizvodnje" Type="int" Mode="In" />
+          <Parameter Name="InicijalnoStanjeKilometara" Type="int" Mode="In" />
+        </Function>
+        <Function Name="VratiBazuNaTvornicke" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="PPPK_ProjektModelStoreContainer">
+          <EntitySet Name="Item" EntityType="Self.Item" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PutniNalog" EntityType="Self.PutniNalog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Servis" EntityType="Self.Servis" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vozac" EntityType="Self.Vozac" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vozilo" EntityType="Self.Vozilo" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__PutniNalo__Vozac__37FA4C37" Association="Self.FK__PutniNalo__Vozac__37FA4C37">
+            <End Role="Vozac" EntitySet="Vozac" />
+            <End Role="PutniNalog" EntitySet="PutniNalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PutniNalo__Vozil__38EE7070" Association="Self.FK__PutniNalo__Vozil__38EE7070">
+            <End Role="Vozilo" EntitySet="Vozilo" />
+            <End Role="PutniNalog" EntitySet="PutniNalog" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Servis__ItemID__3BCADD1B" Association="Self.FK__Servis__ItemID__3BCADD1B">
+            <End Role="Item" EntitySet="Item" />
+            <End Role="Servis" EntitySet="Servis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Servis__VoziloID__3CBF0154" Association="Self.FK__Servis__VoziloID__3CBF0154">
+            <End Role="Vozilo" EntitySet="Vozilo" />
+            <End Role="Servis" EntitySet="Servis" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PPPK_ProjektModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="IDItem" />
+          </Key>
+          <Property Name="IDItem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Servis" Relationship="Self.FK__Servis__ItemID__3BCADD1B" FromRole="Item" ToRole="Servis" />
+        </EntityType>
+        <EntityType Name="PutniNalog">
+          <Key>
+            <PropertyRef Name="IDPutniNalog" />
+          </Key>
+          <Property Name="IDPutniNalog" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VozacID" Type="Int32" />
+          <Property Name="VoziloID" Type="Int32" />
+          <Property Name="Tip" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PocetniGrad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ZavrsniGrad" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OcekivaniDani" Type="Int32" Nullable="false" />
+          <Property Name="Kilometri" Type="Int32" Nullable="false" />
+          <Property Name="Brzina" Type="Int32" Nullable="false" />
+          <Property Name="Gorivo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Vozac" Relationship="Self.FK__PutniNalo__Vozac__37FA4C37" FromRole="PutniNalog" ToRole="Vozac" />
+          <NavigationProperty Name="Vozilo" Relationship="Self.FK__PutniNalo__Vozil__38EE7070" FromRole="PutniNalog" ToRole="Vozilo" />
+        </EntityType>
+        <EntityType Name="Servi">
+          <Key>
+            <PropertyRef Name="IDServis" />
+          </Key>
+          <Property Name="IDServis" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ItemID" Type="Int32" />
+          <Property Name="VoziloID" Type="Int32" />
+          <NavigationProperty Name="Item" Relationship="Self.FK__Servis__ItemID__3BCADD1B" FromRole="Servis" ToRole="Item" />
+          <NavigationProperty Name="Vozilo" Relationship="Self.FK__Servis__VoziloID__3CBF0154" FromRole="Servis" ToRole="Vozilo" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Vozac">
+          <Key>
+            <PropertyRef Name="IDVozac" />
+          </Key>
+          <Property Name="IDVozac" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="BrojMobitela" Type="Int32" Nullable="false" />
+          <Property Name="BrojVozackeDozvole" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PutniNalogs" Relationship="Self.FK__PutniNalo__Vozac__37FA4C37" FromRole="Vozac" ToRole="PutniNalog" />
+        </EntityType>
+        <EntityType Name="Vozilo">
+          <Key>
+            <PropertyRef Name="IDVozilo" />
+          </Key>
+          <Property Name="IDVozilo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipVozila" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MarkaVozila" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GodinaProizvodnje" Type="Int32" Nullable="false" />
+          <Property Name="InicijalnoStanjeKilometara" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PutniNalogs" Relationship="Self.FK__PutniNalo__Vozil__38EE7070" FromRole="Vozilo" ToRole="PutniNalog" />
+          <NavigationProperty Name="Servis" Relationship="Self.FK__Servis__VoziloID__3CBF0154" FromRole="Vozilo" ToRole="Servis" />
+        </EntityType>
+        <Association Name="FK__Servis__ItemID__3BCADD1B">
+          <End Role="Item" Type="Self.Item" Multiplicity="0..1" />
+          <End Role="Servis" Type="Self.Servi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Item">
+              <PropertyRef Name="IDItem" />
+            </Principal>
+            <Dependent Role="Servis">
+              <PropertyRef Name="ItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PutniNalo__Vozac__37FA4C37">
+          <End Role="Vozac" Type="Self.Vozac" Multiplicity="0..1" />
+          <End Role="PutniNalog" Type="Self.PutniNalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozac">
+              <PropertyRef Name="IDVozac" />
+            </Principal>
+            <Dependent Role="PutniNalog">
+              <PropertyRef Name="VozacID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PutniNalo__Vozil__38EE7070">
+          <End Role="Vozilo" Type="Self.Vozilo" Multiplicity="0..1" />
+          <End Role="PutniNalog" Type="Self.PutniNalog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozilo">
+              <PropertyRef Name="IDVozilo" />
+            </Principal>
+            <Dependent Role="PutniNalog">
+              <PropertyRef Name="VoziloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Servis__VoziloID__3CBF0154">
+          <End Role="Vozilo" Type="Self.Vozilo" Multiplicity="0..1" />
+          <End Role="Servis" Type="Self.Servi" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vozilo">
+              <PropertyRef Name="IDVozilo" />
+            </Principal>
+            <Dependent Role="Servis">
+              <PropertyRef Name="VoziloID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PPPK_ProjektEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Items" EntityType="Self.Item" />
+          <EntitySet Name="PutniNalogs" EntityType="Self.PutniNalog" />
+          <EntitySet Name="Servis" EntityType="Self.Servi" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <EntitySet Name="Vozacs" EntityType="Self.Vozac" />
+          <EntitySet Name="Voziloes" EntityType="Self.Vozilo" />
+          <AssociationSet Name="FK__Servis__ItemID__3BCADD1B" Association="Self.FK__Servis__ItemID__3BCADD1B">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="Servis" EntitySet="Servis" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PutniNalo__Vozac__37FA4C37" Association="Self.FK__PutniNalo__Vozac__37FA4C37">
+            <End Role="Vozac" EntitySet="Vozacs" />
+            <End Role="PutniNalog" EntitySet="PutniNalogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PutniNalo__Vozil__38EE7070" Association="Self.FK__PutniNalo__Vozil__38EE7070">
+            <End Role="Vozilo" EntitySet="Voziloes" />
+            <End Role="PutniNalog" EntitySet="PutniNalogs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Servis__VoziloID__3CBF0154" Association="Self.FK__Servis__VoziloID__3CBF0154">
+            <End Role="Vozilo" EntitySet="Voziloes" />
+            <End Role="Servis" EntitySet="Servis" />
+          </AssociationSet>
+          <FunctionImport Name="AddPutniNalog">
+            <Parameter Name="VozacID" Mode="In" Type="Int32" />
+            <Parameter Name="VoziloID" Mode="In" Type="Int32" />
+            <Parameter Name="Tip" Mode="In" Type="String" />
+            <Parameter Name="PocetniGrad" Mode="In" Type="String" />
+            <Parameter Name="ZavrsniGrad" Mode="In" Type="String" />
+            <Parameter Name="OcekivaniDani" Mode="In" Type="Int32" />
+            <Parameter Name="Kilometri" Mode="In" Type="Int32" />
+            <Parameter Name="Brzina" Mode="In" Type="Int32" />
+            <Parameter Name="Gorivo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddServis">
+            <Parameter Name="idServis" Mode="In" Type="Int32" />
+            <Parameter Name="ItemID" Mode="In" Type="Int32" />
+            <Parameter Name="VoziloID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddVozac">
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="BrojMobitela" Mode="In" Type="Int32" />
+            <Parameter Name="BrojVozackeDozvole" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddVozilo">
+            <Parameter Name="TipVozila" Mode="In" Type="String" />
+            <Parameter Name="MarkaVozila" Mode="In" Type="String" />
+            <Parameter Name="GodinaProizvodnje" Mode="In" Type="Int32" />
+            <Parameter Name="InicijalnoStanjeKilometara" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeletePutniNalog">
+            <Parameter Name="idPutniNalog" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteServis">
+            <Parameter Name="idServis" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteVozac">
+            <Parameter Name="idVozac" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteVozilo">
+            <Parameter Name="idVozilo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetAllPutniNalogi" ReturnType="Collection(PPPK_ProjektModel.GetAllPutniNalogi_Result)" />
+          <FunctionImport Name="GetAllVozaci" ReturnType="Collection(PPPK_ProjektModel.GetAllVozaci_Result)" />
+          <FunctionImport Name="GetAllVozila" ReturnType="Collection(PPPK_ProjektModel.GetAllVozila_Result)" />
+          <FunctionImport Name="GetPutniNalog" ReturnType="Collection(PPPK_ProjektModel.GetPutniNalog_Result)">
+            <Parameter Name="idPutniNalog" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetVozac" ReturnType="Collection(PPPK_ProjektModel.GetVozac_Result)">
+            <Parameter Name="idVozac" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetVozilo" ReturnType="Collection(PPPK_ProjektModel.GetVozilo_Result)">
+            <Parameter Name="idVozilo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SelectAll" ReturnType="Collection(PPPK_ProjektModel.SelectAll_Result)" />
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(PPPK_ProjektModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(PPPK_ProjektModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="UpdatePutniNalog">
+            <Parameter Name="idPutniNalog" Mode="In" Type="Int32" />
+            <Parameter Name="VozacID" Mode="In" Type="Int32" />
+            <Parameter Name="VoziloID" Mode="In" Type="Int32" />
+            <Parameter Name="Tip" Mode="In" Type="String" />
+            <Parameter Name="PocetniGrad" Mode="In" Type="String" />
+            <Parameter Name="ZavrsniGrad" Mode="In" Type="String" />
+            <Parameter Name="OcekivaniDani" Mode="In" Type="Int32" />
+            <Parameter Name="Kilometri" Mode="In" Type="Int32" />
+            <Parameter Name="Brzina" Mode="In" Type="Int32" />
+            <Parameter Name="Gorivo" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateServis">
+            <Parameter Name="idServis" Mode="In" Type="Int32" />
+            <Parameter Name="ItemID" Mode="In" Type="Int32" />
+            <Parameter Name="VoziloID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateVozac">
+            <Parameter Name="idVozac" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="BrojMobitela" Mode="In" Type="Int32" />
+            <Parameter Name="BrojVozackeDozvole" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateVozilo">
+            <Parameter Name="idVozilo" Mode="In" Type="Int32" />
+            <Parameter Name="TipVozila" Mode="In" Type="String" />
+            <Parameter Name="MarkaVozila" Mode="In" Type="String" />
+            <Parameter Name="GodinaProizvodnje" Mode="In" Type="Int32" />
+            <Parameter Name="InicijalnoStanjeKilometara" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="VratiBazuNaTvornicke" />
+        </EntityContainer>
+        <ComplexType Name="GetAllPutniNalogi_Result">
+          <Property Type="Int32" Name="IDPutniNalog" Nullable="false" />
+          <Property Type="Int32" Name="VozacID" Nullable="true" />
+          <Property Type="Int32" Name="VoziloID" Nullable="true" />
+          <Property Type="String" Name="Tip" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PocetniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ZavrsniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="OcekivaniDani" Nullable="false" />
+          <Property Type="Int32" Name="Kilometri" Nullable="false" />
+          <Property Type="Int32" Name="Brzina" Nullable="false" />
+          <Property Type="Int32" Name="Gorivo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetAllVozaci_Result">
+          <Property Type="Int32" Name="IDVozac" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="BrojMobitela" Nullable="false" />
+          <Property Type="Int32" Name="BrojVozackeDozvole" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetAllVozila_Result">
+          <Property Type="Int32" Name="IDVozilo" Nullable="false" />
+          <Property Type="String" Name="TipVozila" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MarkaVozila" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="GodinaProizvodnje" Nullable="false" />
+          <Property Type="Int32" Name="InicijalnoStanjeKilometara" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetPutniNalog_Result">
+          <Property Type="Int32" Name="IDPutniNalog" Nullable="false" />
+          <Property Type="Int32" Name="VozacID" Nullable="true" />
+          <Property Type="Int32" Name="VoziloID" Nullable="true" />
+          <Property Type="String" Name="Tip" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PocetniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ZavrsniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="OcekivaniDani" Nullable="false" />
+          <Property Type="Int32" Name="Kilometri" Nullable="false" />
+          <Property Type="Int32" Name="Brzina" Nullable="false" />
+          <Property Type="Int32" Name="Gorivo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetVozac_Result">
+          <Property Type="Int32" Name="IDVozac" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="BrojMobitela" Nullable="false" />
+          <Property Type="Int32" Name="BrojVozackeDozvole" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetVozilo_Result">
+          <Property Type="Int32" Name="IDVozilo" Nullable="false" />
+          <Property Type="String" Name="TipVozila" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="MarkaVozila" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="GodinaProizvodnje" Nullable="false" />
+          <Property Type="Int32" Name="InicijalnoStanjeKilometara" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SelectAll_Result">
+          <Property Type="Int32" Name="IDPutniNalog" Nullable="false" />
+          <Property Type="Int32" Name="VozacID" Nullable="true" />
+          <Property Type="Int32" Name="VoziloID" Nullable="true" />
+          <Property Type="String" Name="Tip" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PocetniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="ZavrsniGrad" Nullable="false" MaxLength="50" />
+          <Property Type="Int32" Name="OcekivaniDani" Nullable="false" />
+          <Property Type="Int32" Name="Kilometri" Nullable="false" />
+          <Property Type="Int32" Name="Brzina" Nullable="false" />
+          <Property Type="Int32" Name="Gorivo" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PPPK_ProjektModelStoreContainer" CdmEntityContainer="PPPK_ProjektEntities">
+          <EntitySetMapping Name="Items">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.Item">
+              <MappingFragment StoreEntitySet="Item">
+                <ScalarProperty Name="IDItem" ColumnName="IDItem" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PutniNalogs">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.PutniNalog">
+              <MappingFragment StoreEntitySet="PutniNalog">
+                <ScalarProperty Name="IDPutniNalog" ColumnName="IDPutniNalog" />
+                <ScalarProperty Name="VozacID" ColumnName="VozacID" />
+                <ScalarProperty Name="VoziloID" ColumnName="VoziloID" />
+                <ScalarProperty Name="Tip" ColumnName="Tip" />
+                <ScalarProperty Name="PocetniGrad" ColumnName="PocetniGrad" />
+                <ScalarProperty Name="ZavrsniGrad" ColumnName="ZavrsniGrad" />
+                <ScalarProperty Name="OcekivaniDani" ColumnName="OcekivaniDani" />
+                <ScalarProperty Name="Kilometri" ColumnName="Kilometri" />
+                <ScalarProperty Name="Brzina" ColumnName="Brzina" />
+                <ScalarProperty Name="Gorivo" ColumnName="Gorivo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Servis">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.Servi">
+              <MappingFragment StoreEntitySet="Servis">
+                <ScalarProperty Name="IDServis" ColumnName="IDServis" />
+                <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+                <ScalarProperty Name="VoziloID" ColumnName="VoziloID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vozacs">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.Vozac">
+              <MappingFragment StoreEntitySet="Vozac">
+                <ScalarProperty Name="IDVozac" ColumnName="IDVozac" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BrojMobitela" ColumnName="BrojMobitela" />
+                <ScalarProperty Name="BrojVozackeDozvole" ColumnName="BrojVozackeDozvole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voziloes">
+            <EntityTypeMapping TypeName="PPPK_ProjektModel.Vozilo">
+              <MappingFragment StoreEntitySet="Vozilo">
+                <ScalarProperty Name="IDVozilo" ColumnName="IDVozilo" />
+                <ScalarProperty Name="TipVozila" ColumnName="TipVozila" />
+                <ScalarProperty Name="MarkaVozila" ColumnName="MarkaVozila" />
+                <ScalarProperty Name="GodinaProizvodnje" ColumnName="GodinaProizvodnje" />
+                <ScalarProperty Name="InicijalnoStanjeKilometara" ColumnName="InicijalnoStanjeKilometara" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddPutniNalog" FunctionName="PPPK_ProjektModel.Store.AddPutniNalog" />
+          <FunctionImportMapping FunctionImportName="AddServis" FunctionName="PPPK_ProjektModel.Store.AddServis" />
+          <FunctionImportMapping FunctionImportName="AddVozac" FunctionName="PPPK_ProjektModel.Store.AddVozac" />
+          <FunctionImportMapping FunctionImportName="AddVozilo" FunctionName="PPPK_ProjektModel.Store.AddVozilo" />
+          <FunctionImportMapping FunctionImportName="DeletePutniNalog" FunctionName="PPPK_ProjektModel.Store.DeletePutniNalog" />
+          <FunctionImportMapping FunctionImportName="DeleteServis" FunctionName="PPPK_ProjektModel.Store.DeleteServis" />
+          <FunctionImportMapping FunctionImportName="DeleteVozac" FunctionName="PPPK_ProjektModel.Store.DeleteVozac" />
+          <FunctionImportMapping FunctionImportName="DeleteVozilo" FunctionName="PPPK_ProjektModel.Store.DeleteVozilo" />
+          <FunctionImportMapping FunctionImportName="GetAllPutniNalogi" FunctionName="PPPK_ProjektModel.Store.GetAllPutniNalogi">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetAllPutniNalogi_Result">
+                <ScalarProperty Name="IDPutniNalog" ColumnName="IDPutniNalog" />
+                <ScalarProperty Name="VozacID" ColumnName="VozacID" />
+                <ScalarProperty Name="VoziloID" ColumnName="VoziloID" />
+                <ScalarProperty Name="Tip" ColumnName="Tip" />
+                <ScalarProperty Name="PocetniGrad" ColumnName="PocetniGrad" />
+                <ScalarProperty Name="ZavrsniGrad" ColumnName="ZavrsniGrad" />
+                <ScalarProperty Name="OcekivaniDani" ColumnName="OcekivaniDani" />
+                <ScalarProperty Name="Kilometri" ColumnName="Kilometri" />
+                <ScalarProperty Name="Brzina" ColumnName="Brzina" />
+                <ScalarProperty Name="Gorivo" ColumnName="Gorivo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllVozaci" FunctionName="PPPK_ProjektModel.Store.GetAllVozaci">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetAllVozaci_Result">
+                <ScalarProperty Name="IDVozac" ColumnName="IDVozac" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BrojMobitela" ColumnName="BrojMobitela" />
+                <ScalarProperty Name="BrojVozackeDozvole" ColumnName="BrojVozackeDozvole" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAllVozila" FunctionName="PPPK_ProjektModel.Store.GetAllVozila">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetAllVozila_Result">
+                <ScalarProperty Name="IDVozilo" ColumnName="IDVozilo" />
+                <ScalarProperty Name="TipVozila" ColumnName="TipVozila" />
+                <ScalarProperty Name="MarkaVozila" ColumnName="MarkaVozila" />
+                <ScalarProperty Name="GodinaProizvodnje" ColumnName="GodinaProizvodnje" />
+                <ScalarProperty Name="InicijalnoStanjeKilometara" ColumnName="InicijalnoStanjeKilometara" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetPutniNalog" FunctionName="PPPK_ProjektModel.Store.GetPutniNalog">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetPutniNalog_Result">
+                <ScalarProperty Name="IDPutniNalog" ColumnName="IDPutniNalog" />
+                <ScalarProperty Name="VozacID" ColumnName="VozacID" />
+                <ScalarProperty Name="VoziloID" ColumnName="VoziloID" />
+                <ScalarProperty Name="Tip" ColumnName="Tip" />
+                <ScalarProperty Name="PocetniGrad" ColumnName="PocetniGrad" />
+                <ScalarProperty Name="ZavrsniGrad" ColumnName="ZavrsniGrad" />
+                <ScalarProperty Name="OcekivaniDani" ColumnName="OcekivaniDani" />
+                <ScalarProperty Name="Kilometri" ColumnName="Kilometri" />
+                <ScalarProperty Name="Brzina" ColumnName="Brzina" />
+                <ScalarProperty Name="Gorivo" ColumnName="Gorivo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetVozac" FunctionName="PPPK_ProjektModel.Store.GetVozac">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetVozac_Result">
+                <ScalarProperty Name="IDVozac" ColumnName="IDVozac" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="BrojMobitela" ColumnName="BrojMobitela" />
+                <ScalarProperty Name="BrojVozackeDozvole" ColumnName="BrojVozackeDozvole" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetVozilo" FunctionName="PPPK_ProjektModel.Store.GetVozilo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.GetVozilo_Result">
+                <ScalarProperty Name="IDVozilo" ColumnName="IDVozilo" />
+                <ScalarProperty Name="TipVozila" ColumnName="TipVozila" />
+                <ScalarProperty Name="MarkaVozila" ColumnName="MarkaVozila" />
+                <ScalarProperty Name="GodinaProizvodnje" ColumnName="GodinaProizvodnje" />
+                <ScalarProperty Name="InicijalnoStanjeKilometara" ColumnName="InicijalnoStanjeKilometara" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SelectAll" FunctionName="PPPK_ProjektModel.Store.SelectAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.SelectAll_Result">
+                <ScalarProperty Name="IDPutniNalog" ColumnName="IDPutniNalog" />
+                <ScalarProperty Name="VozacID" ColumnName="VozacID" />
+                <ScalarProperty Name="VoziloID" ColumnName="VoziloID" />
+                <ScalarProperty Name="Tip" ColumnName="Tip" />
+                <ScalarProperty Name="PocetniGrad" ColumnName="PocetniGrad" />
+                <ScalarProperty Name="ZavrsniGrad" ColumnName="ZavrsniGrad" />
+                <ScalarProperty Name="OcekivaniDani" ColumnName="OcekivaniDani" />
+                <ScalarProperty Name="Kilometri" ColumnName="Kilometri" />
+                <ScalarProperty Name="Brzina" ColumnName="Brzina" />
+                <ScalarProperty Name="Gorivo" ColumnName="Gorivo" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="PPPK_ProjektModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="PPPK_ProjektModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="PPPK_ProjektModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="PPPK_ProjektModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="PPPK_ProjektModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PPPK_ProjektModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="PPPK_ProjektModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="PPPK_ProjektModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="UpdatePutniNalog" FunctionName="PPPK_ProjektModel.Store.UpdatePutniNalog" />
+          <FunctionImportMapping FunctionImportName="UpdateServis" FunctionName="PPPK_ProjektModel.Store.UpdateServis" />
+          <FunctionImportMapping FunctionImportName="UpdateVozac" FunctionName="PPPK_ProjektModel.Store.UpdateVozac" />
+          <FunctionImportMapping FunctionImportName="UpdateVozilo" FunctionName="PPPK_ProjektModel.Store.UpdateVozilo" />
+          <FunctionImportMapping FunctionImportName="VratiBazuNaTvornicke" FunctionName="PPPK_ProjektModel.Store.VratiBazuNaTvornicke" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
